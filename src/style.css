@@ -1,0 +1,25 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body{
+display: flex;
+justify-content: space-around;
+align-items: center;
+flex-wrap: wrap;
+padding: 1rem;
+gap: 1rem;
+height: 100vh;
+margin: 0;
+background-color: #E9DCC9;
+font-family: Outfit, sans-serif;
+}
+canvas{
+  display: none;
+  border-radius: 20px;
+  min-width: 400px;
+  min-height: 400px;
+
+  
+}
