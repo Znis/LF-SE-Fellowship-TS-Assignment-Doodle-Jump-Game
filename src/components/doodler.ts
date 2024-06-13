@@ -28,5 +28,6 @@ export default class Doodler implements IDoodler {
   updateDoodler(){
     this.direction = doodlerState.doodlerDir;
     this.imagePath = this.direction == Direction.right ? ImagePath.right : ImagePath.left;
+    this.image.src = this.imagePath;
   }
 }

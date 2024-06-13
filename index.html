@@ -1,12 +1,45 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
+    rel="stylesheet"
+  />
     <title>Doodle Jump</title>
   </head>
   <body>
+    <div class="info-screen" id="info-screen">
+      <figure class="info-screen__bg-image-wrapper">
+        <img
+          src="./assets/images/bg-image.png"
+          alt=""
+          class="info-screen__bg-image"
+        />
+      </figure>
+      <h1>Doodle Jump</h1>
+      <div class="icon-div">
+        <figure class="icon-image-wrapper1">
+          <img src="./assets/images/doodler-left.png" alt="" class="icon-image">
+        </figure>
+        <figure class="icon-image-wrapper2">
+          <img src="./assets/images/doodler-right.png" alt="" class="icon-image">
+        </figure>
+      </div>
+      <div class="intro__name-input">
+        <input
+          type="text"
+          name="name"
+          class="name"
+          id="name"
+          placeholder="Enter your name"
+          required
+        />
+        <button class="button" id="enter-btn">Enter</button>
+      </div>
+    </div>
     <canvas id="gameCanvas"></canvas>
     <script type="module" src="/src/main.ts"></script>
   </body>

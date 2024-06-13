@@ -1,5 +1,7 @@
 import Doodler from "./components/doodler";
+import Point from "./shapes/point";
 import Platform from "./components/platform";
+import { DIMENSIONS } from "./constants";
 
 //game state variables that is accessed globally
 export enum GameState {
@@ -28,15 +30,20 @@ type stateVariables = {
 };
 export const stateVariables = {
   doodler: {} as Doodler,
-  gameState: GameState.initialisation,
+  gameState: GameState.welcomeScreen,
   score: 0,
   highScore: 0,
   platformArray: [] as Platform[],
+  reqAnimFrame: 0,
 };
 
 export const doodlerState = {
   doodlerDir: Direction.right,
-  isGrounded: true,
+  onGround: true,
+  onPlatform: false,
   distanceFromGround: 0,
+  gravity: 0.4,
+  currentPlatform: new Platform(new Point(0,DIMENSIONS.CANVAS_HEIGHT),10,DIMENSIONS.CANVAS_WIDTH,''),
   dy: 0,
+
 };

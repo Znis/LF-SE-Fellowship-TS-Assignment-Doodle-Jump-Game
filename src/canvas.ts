@@ -1,6 +1,7 @@
 import { DIMENSIONS } from "./constants.ts";
 import { GameState,stateVariables } from "./state-variables.ts";
 const canvas = document.querySelector("#gameCanvas") as HTMLCanvasElement;
+import { resumeGame, initialiseGame, restartGame } from "./functions.ts";
 const ctx = canvas.getContext("2d")!;
 
 canvas.width = DIMENSIONS.CANVAS_WIDTH;
@@ -34,7 +35,7 @@ export default function drawCanvas(): void {
     ctx.stroke();
   }
 
-  drawScore();
+
 
 
   stateVariables.platformArray.forEach(element => {
@@ -56,22 +57,23 @@ export default function drawCanvas(): void {
     stateVariables.doodler.w,
     stateVariables.doodler.h
   );
+  drawScore();
 }
 
 
 canvas.addEventListener("click", () => {
   if (stateVariables.gameState == GameState.gameOver) {
-    // restartGame();
+    restartGame();
   }
   if (stateVariables.gameState == GameState.paused) {
-    // resumeGame();
+    resumeGame();
   }
 });
 
 function drawScore(): void {
   ctx.font = "24px Outfit";
   ctx.fillStyle = "#fff";
-  ctx.fillText("Score: " + stateVariables.score, 10, 30);
+  ctx.fillText("Score: " + stateVariables.score, 50, 30);
 }
 
 export function drawGameOver(): void {
@@ -79,7 +81,7 @@ export function drawGameOver(): void {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.font = "48px Outfit";
   ctx.fillStyle = "#ff0000";
-  ctx.fillText("Game Over", canvas.width / 2 - 130, canvas.height / 2 - 50);
+  ctx.fillText("Game Over", canvas.width / 2 - 30, canvas.height / 2 - 50);
   ctx.font = "32px Outfit";
   ctx.fillText(
     `Score: ${stateVariables.score}`,
@@ -123,4 +125,10 @@ export function drawGamePause(): void {
     canvas.width / 2 - 100,
     canvas.height / 2 + 140
   );
+}
+export function showStartMessage(): void{
+  ctx.font = '20px Arial';
+  ctx.fillStyle = 'black';
+  ctx.textAlign = 'center';
+  ctx.fillText('Press Space to Start', canvas.width / 2, canvas.height - 60);
 }
