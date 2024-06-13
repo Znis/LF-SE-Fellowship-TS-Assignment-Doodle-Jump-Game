@@ -249,6 +249,7 @@ export function restartGame() {
   stateVariables.gameOverTransition = 150;
   stateVariables.platformArray = [];
   stateVariables.gameState = GameState.initialisation;
+  cancelAnimationFrame(stateVariables.reqAnimFrame);
   initialiseGame();
 
 }
