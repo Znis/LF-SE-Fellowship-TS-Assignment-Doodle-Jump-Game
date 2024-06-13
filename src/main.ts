@@ -8,6 +8,7 @@ import {
   moveDoodler,
   updateCameraPosition,
   gameOverAnimation,
+  checkForPowerCollision,
 } from "./functions";
 import { stateVariables, GameState } from "./state-variables.ts";
 import "./style.css";
@@ -39,6 +40,7 @@ export function draw() {
     updateCameraPosition();
     moveRandomPlatforms();
     checkAndHandleCollision();
+    checkForPowerCollision();
   } else if (stateVariables.gameState == GameState.gameOver) {
     gameOverAnimation();
     stateVariables.highScore =

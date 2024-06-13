@@ -1,7 +1,8 @@
-import { DIMENSIONS } from "./constants.ts";
-import { GameState,stateVariables } from "./state-variables.ts";
+import { DIMENSIONS, DOODLER_WIDTH } from "./constants.ts";
+import { Direction, GameState,doodlerState,stateVariables } from "./state-variables.ts";
 const canvas = document.querySelector("#gameCanvas") as HTMLCanvasElement;
 import { resumeGame, restartGame } from "./functions.ts";
+import jetSprite from "./spriteAnim/spriteJet.ts";
 
 const ctx = canvas.getContext("2d")!;
 
@@ -49,7 +50,43 @@ export default function drawCanvas(): void {
     element.h
   );
   });
+if(!doodlerState.hasPower){
+  stateVariables.powerArray.forEach(power => {
+    ctx.drawImage(
+      power.image,
+      power.startPoint.x,
+      power.startPoint.y,
+      power.w,
+      power.h
+    );
+  });
+}
 
+  if(doodlerState.hasPower){
+  stateVariables.jetAnimIdx < 9 ? stateVariables.jetAnimIdx++ : stateVariables.jetAnimIdx = 0;
+  if(doodlerState.doodlerDir == Direction.right){
+    ctx.drawImage(  jetSprite.sprite,
+      jetSprite.position[stateVariables.jetAnimIdx].x,
+      jetSprite.position[stateVariables.jetAnimIdx].y,
+      jetSprite.width,
+      jetSprite.height,
+      stateVariables.doodler.startPoint.x - 14,
+     stateVariables.doodler.startPoint.y + 10,
+      20,
+      50);
+  }else{
+    ctx.drawImage(  jetSprite.sprite,
+      jetSprite.position[stateVariables.jetAnimIdx].x,
+      jetSprite.position[stateVariables.jetAnimIdx].y,
+      jetSprite.width,
+      jetSprite.height,
+      stateVariables.doodler.startPoint.x + DOODLER_WIDTH - 5,
+     stateVariables.doodler.startPoint.y + 10,
+      20,
+      50);
+  }
+  }
+  drawScore();
   ctx.beginPath();
   ctx.drawImage(
     stateVariables.doodler.image,
@@ -58,10 +95,9 @@ export default function drawCanvas(): void {
     stateVariables.doodler.w,
     stateVariables.doodler.h
   );
-  // const random = new Image();
-  // random.src='./assets/images/jetSheet.png';
-  // ctx.drawImage(random,jetSprite.position[1].x,jetSprite.position[1].y,jetSprite.width,jetSprite.height);
-  drawScore();
+
+
+
 }
 
 
