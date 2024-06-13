@@ -1,5 +1,5 @@
 import Point from "../shapes/point.ts";
-import { Direction, ImagePath, stateVariables, doodlerState } from "../state-variables.ts";
+import { Direction, ImagePath, doodlerState } from "../state-variables.ts";
 export interface IDoodler {
   startPoint: Point; //it represents the top-left point of the rectangular container of the car
   h: number;
@@ -20,14 +20,16 @@ export default class Doodler implements IDoodler {
     this.h = h;
     this.w = w;
     this.image = new Image();
-    this.direction = direction
-    this.imagePath = this.direction == Direction.right ? ImagePath.right : ImagePath.left;
+    this.direction = direction;
+    this.imagePath =
+      this.direction == Direction.right ? ImagePath.right : ImagePath.left;
     this.image.src = this.imagePath;
     console.log(this.imagePath);
   }
-  updateDoodler(){
+  updateDoodler() {
     this.direction = doodlerState.doodlerDir;
-    this.imagePath = this.direction == Direction.right ? ImagePath.right : ImagePath.left;
+    this.imagePath =
+      this.direction == Direction.right ? ImagePath.right : ImagePath.left;
     this.image.src = this.imagePath;
   }
 }
