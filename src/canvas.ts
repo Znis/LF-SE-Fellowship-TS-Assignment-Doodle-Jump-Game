@@ -113,7 +113,7 @@ canvas.addEventListener("click", () => {
 function drawScore(): void {
   ctx.font = "24px Outfit";
   ctx.fillStyle = "#FF5733";
-  ctx.fillText("Score: " + stateVariables.score, 50, 30);
+  ctx.fillText("Score: " + stateVariables.score, 55, 30);
 }
 
 export function drawGameOver(i: number): void {

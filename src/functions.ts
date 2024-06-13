@@ -259,6 +259,15 @@ export function gameOverAnimation() {
     }
   }
 }
+//updates the leaderboard(scoreboard) at the gameover
+export function updateLeaderboard(
+  parentElement: HTMLOListElement,
+  element: HTMLLIElement,
+  username: string
+) {
+  element.innerHTML = `${username}  &nbsp; &nbsp;<b>${stateVariables.score}</b>`;
+  parentElement.appendChild(element);
+}
 
 export function pauseGame() {
   if (stateVariables.gameState == GameState.running) {
