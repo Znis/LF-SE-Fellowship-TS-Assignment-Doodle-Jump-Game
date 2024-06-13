@@ -17,6 +17,7 @@ import {
   doodlerState,
   stateVariables,
   GameState,
+  PlatformType,
 } from "./state-variables";
 import Platform from "./components/platform";
 import { getRandomInt } from "./utils";
@@ -37,34 +38,35 @@ export function initialiseDoodler(): void {
 
 export function generateInitialPlatforms(): void {
   let ymax = DIMENSIONS.CANVAS_HEIGHT - 50;
-    while (ymax > 0) {
-    let randomX = Math.floor(Math.random() * (DIMENSIONS.CANVAS_WIDTH - PLATFORM_WIDTH)*4/5);
-      const platform: Platform = new Platform(
-        new Point(
-          getRandomInt(0, randomX),
-          ymax
-        ),
-        PLATFORM_HEIGHT,
-        PLATFORM_WIDTH,
-        "./assets/images/platform.png"
-      );
-      stateVariables.platformArray.push(platform);
+  while (ymax > 0) {
+    let randomX = Math.floor(
+      (Math.random() * (DIMENSIONS.CANVAS_WIDTH - PLATFORM_WIDTH) * 4) / 5
+    );
+    const platform: Platform = new Platform(
+      new Point(getRandomInt(0, randomX), ymax),
+      PLATFORM_HEIGHT,
+      PLATFORM_WIDTH,
+      "./assets/images/platform.png"
+    );
+    stateVariables.platformArray.push(platform);
 
-      ymax -= 50;
-    }
-
+    ymax -= 40;
+  }
 }
 
 export function generateRandomPlatform() {
-    let randomX = Math.floor(Math.random() * (DIMENSIONS.CANVAS_WIDTH - PLATFORM_WIDTH)*4/5);
-    if(Math.random() < 0.1){
-        const power: Power = new Power(new Point(randomX, -40),
-        POWER_WIDTH,
-        POWER_HEIGHT,
-        "./assets/images/jetpack.png"
+  let randomX = Math.floor(
+    (Math.random() * (DIMENSIONS.CANVAS_WIDTH - PLATFORM_WIDTH) * 4) / 5
+  );
+  if (Math.random() < 0.1) {
+    const power: Power = new Power(
+      new Point(randomX, -40),
+      POWER_WIDTH,
+      POWER_HEIGHT,
+      "./assets/images/jetpack.png"
     );
     stateVariables.powerArray.push(power);
-    }
+  }
 
   const platform: Platform = new Platform(
     new Point(randomX, 0),
@@ -74,47 +76,45 @@ export function generateRandomPlatform() {
   );
 
   stateVariables.platformArray.unshift(platform);
-
 }
 
 export function moveRandomPlatforms() {
-    console.log(doodlerState.distanceFromGround)
-  if(doodlerState.distanceFromGround > DIMENSIONS.CANVAS_HEIGHT){
+  console.log(doodlerState.distanceFromGround);
+  if (doodlerState.distanceFromGround > DIMENSIONS.CANVAS_HEIGHT) {
     stateVariables.platformArray.forEach((platform) => {
       platform.movePlatform();
     });
   }
-  
 }
 
 export function updateCameraPosition(): void {
   const dy = stateVariables.doodler.startPoint.y - DIMENSIONS.CANVAS_HEIGHT / 2;
- 
-  if(dy < 0){
-  stateVariables.doodler.startPoint.y -= dy;
-  stateVariables.platformArray.forEach((platform) => {
-    platform.startPoint.y -= dy;
-  });
-  stateVariables.powerArray.forEach((power) => {
-    power.startPoint.y -= dy;
-  });
-  doodlerState.currentPlatform.startPoint.y -= dy;
-  if (
-    stateVariables.platformArray[0].startPoint.y >
-    50
-  ) {
-    
-    generateRandomPlatform();
-    stateVariables.score++;
-    stateVariables.highScore = Math.max(stateVariables.highScore, stateVariables.score);
-    doodlerState.distanceFromGround += 50;
+
+  if (dy < 0) {
+    stateVariables.doodler.startPoint.y -= dy;
+    stateVariables.platformArray.forEach((platform) => {
+      platform.startPoint.y -= dy;
+    });
+    stateVariables.powerArray.forEach((power) => {
+      power.startPoint.y -= dy;
+    });
+    doodlerState.currentPlatform.startPoint.y -= dy;
+    if (stateVariables.platformArray[0].startPoint.y > 40) {
+      generateRandomPlatform();
+      stateVariables.score++;
+      stateVariables.highScore = Math.max(
+        stateVariables.highScore,
+        stateVariables.score
+      );
+      doodlerState.distanceFromGround += 40;
+    }
   }
-
-
-}
 }
 
-export function collisionDetection(doodler: Doodler, platform: Platform | Power) {
+export function collisionDetection(
+  doodler: Doodler,
+  platform: Platform | Power
+) {
   return (
     doodler.startPoint.x < platform.startPoint.x + platform.w &&
     doodler.startPoint.x + doodler.w > platform.startPoint.x &&
@@ -123,18 +123,18 @@ export function collisionDetection(doodler: Doodler, platform: Platform | Power)
   );
 }
 
-
-export function moveDoodler(): void{
-stateVariables.doodler.startPoint.x += doodlerState.dx;
-if(doodlerState.dx > 0) doodlerState.dx -= 0.4; 
-if(doodlerState.dx < 0) doodlerState.dx += 0.4; 
+export function moveDoodler(): void {
+  stateVariables.doodler.startPoint.x += doodlerState.dx;
+  if (doodlerState.dx > 0) doodlerState.dx -= 0.4;
+  if (doodlerState.dx < 0) doodlerState.dx += 0.4;
 }
 
 export function checkAndHandleCollision() {
   stateVariables.platformArray.forEach((platform) => {
     if (
       collisionDetection(stateVariables.doodler, platform) &&
-      doodlerState.dy >= 0
+      doodlerState.dy >= 0 &&
+      platform.type == PlatformType.flexible
     ) {
       stateVariables.doodler.startPoint.y =
         platform.startPoint.y - stateVariables.doodler.h;
@@ -142,23 +142,21 @@ export function checkAndHandleCollision() {
       doodlerState.onPlatform = true;
       doodlerState.onGround = false;
       doodlerState.dy = -SPEED_Y;
-
     }
   });
 }
 
 export function handleJump(): void {
-    if(doodlerState.hasPower){
-        doodlerState.dy = -SPEED_Y;
-      }
+  if (doodlerState.hasPower) {
+    doodlerState.dy = -SPEED_Y;
+  }
   doodlerState.dy += doodlerState.gravity;
   stateVariables.doodler.startPoint.y += doodlerState.dy;
 
-
-
   if (
     stateVariables.doodler.startPoint.y >=
-    DIMENSIONS.CANVAS_HEIGHT - stateVariables.doodler.h && doodlerState.onGround
+      DIMENSIONS.CANVAS_HEIGHT - stateVariables.doodler.h &&
+    doodlerState.onGround
   ) {
     doodlerState.dy = -SPEED_Y;
   }
@@ -168,19 +166,21 @@ export function handleJump(): void {
       doodlerState.currentPlatform.startPoint.x +
         doodlerState.currentPlatform.w &&
     stateVariables.doodler.startPoint.x + stateVariables.doodler.w >
-      doodlerState.currentPlatform.startPoint.x && doodlerState.currentPlatform.startPoint.y <= DIMENSIONS.CANVAS_HEIGHT;
+      doodlerState.currentPlatform.startPoint.x &&
+    doodlerState.currentPlatform.startPoint.y <= DIMENSIONS.CANVAS_HEIGHT;
 
-
-
-  if(stateVariables.doodler.startPoint.y+stateVariables.doodler.h-doodlerState.gravity*2 >= DIMENSIONS.CANVAS_HEIGHT){
-   gameOver();
+  if (
+    stateVariables.doodler.startPoint.y +
+      stateVariables.doodler.h -
+      doodlerState.gravity * 2 >=
+    DIMENSIONS.CANVAS_HEIGHT
+  ) {
+    gameOver();
   }
   if (
     stateVariables.doodler.startPoint.y < DIMENSIONS.CANVAS_HEIGHT / 2 &&
     doodlerState.onPlatform
   ) {
-    
-
   }
 }
 export function goRight(): void {
@@ -201,7 +201,6 @@ export function goLeft(): void {
       DIMENSIONS.CANVAS_WIDTH - stateVariables.doodler.w;
   } else {
     doodlerState.dx = -SPEED_X;
-    
   }
   doodlerState.doodlerDir = Direction.left;
   stateVariables.doodler.updateDoodler();
@@ -219,55 +218,45 @@ export function startGame() {
 
 export function gameOver() {
   stateVariables.gameState = GameState.gameOver;
-
 }
-export function checkForPowerCollision(){
-    stateVariables.powerArray.forEach((power) => {
-    if (
-        collisionDetection(stateVariables.doodler, power)
-      ) {  
-        if(!doodlerState.hasPower) initiateJetpackPower();
-        
-        }
-});
+export function checkForPowerCollision() {
+  stateVariables.powerArray.forEach((power) => {
+    if (collisionDetection(stateVariables.doodler, power)) {
+      if (!doodlerState.hasPower) initiateJetpackPower();
     }
-
-
-export function initiateJetpackPower(){
-    doodlerState.hasPower = true;
-    const jetpack = setTimeout(() => {
-        clearTimeout(jetpack);
-        doodlerState.hasPower = false;
-
-    }, 4000);
+  });
 }
 
+export function initiateJetpackPower() {
+  doodlerState.hasPower = true;
+  const jetpack = setTimeout(() => {
+    clearTimeout(jetpack);
+    doodlerState.hasPower = false;
+  }, 4000);
+}
 
-export function gameOverAnimation(){
-
-
-    if (doodlerState.fallDistance > 0) {
-        const dy = stateVariables.doodler.startPoint.y - DIMENSIONS.CANVAS_HEIGHT / 2;
-        stateVariables.platformArray.forEach((element) => {
-            element.startPoint.y -= dy;
-          });
-          stateVariables.powerArray.forEach((power) => {
-            power.startPoint.y -= dy;
-          });
-          doodlerState.currentPlatform.startPoint.y -= dy;
-        stateVariables.doodler.startPoint.y -= dy;
-        stateVariables.doodler.startPoint.y +=5;
-        doodlerState.fallDistance -= 5;
-      }else{
-
-        stateVariables.gameOverTransition > 0 ? drawGameOver(stateVariables.gameOverTransition -= 4): drawGameOver(0);
-        if(stateVariables.doodler.startPoint.y < DIMENSIONS.CANVAS_HEIGHT){
-            stateVariables.doodler.startPoint.y += 4;
-            
-        }
-      
-      }
-
+export function gameOverAnimation() {
+  if (doodlerState.fallDistance > 0) {
+    const dy =
+      stateVariables.doodler.startPoint.y - DIMENSIONS.CANVAS_HEIGHT / 2;
+    stateVariables.platformArray.forEach((element) => {
+      element.startPoint.y -= dy;
+    });
+    stateVariables.powerArray.forEach((power) => {
+      power.startPoint.y -= dy;
+    });
+    doodlerState.currentPlatform.startPoint.y -= dy;
+    stateVariables.doodler.startPoint.y -= dy;
+    stateVariables.doodler.startPoint.y += 5;
+    doodlerState.fallDistance -= 5;
+  } else {
+    stateVariables.gameOverTransition > 0
+      ? drawGameOver((stateVariables.gameOverTransition -= 4))
+      : drawGameOver(0);
+    if (stateVariables.doodler.startPoint.y < DIMENSIONS.CANVAS_HEIGHT) {
+      stateVariables.doodler.startPoint.y += 4;
+    }
+  }
 }
 
 export function pauseGame() {
@@ -285,7 +274,12 @@ export function resumeGame() {
 }
 export function restartGame() {
   stateVariables.score = 0;
-  doodlerState.currentPlatform = new Platform(new Point(0,DIMENSIONS.CANVAS_HEIGHT),10,DIMENSIONS.CANVAS_WIDTH,'');
+  doodlerState.currentPlatform = new Platform(
+    new Point(0, DIMENSIONS.CANVAS_HEIGHT),
+    10,
+    DIMENSIONS.CANVAS_WIDTH,
+    ""
+  );
   doodlerState.distanceFromGround = 0;
   doodlerState.onPlatform = false;
   doodlerState.onGround = true;
@@ -297,5 +291,4 @@ export function restartGame() {
   stateVariables.gameState = GameState.initialisation;
   cancelAnimationFrame(stateVariables.reqAnimFrame);
   initialiseGame();
-
 }

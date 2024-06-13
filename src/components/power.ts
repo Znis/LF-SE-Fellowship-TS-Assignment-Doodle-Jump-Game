@@ -1,6 +1,4 @@
 import Point from "../shapes/point.ts";
-import { DIMENSIONS } from '../constants.ts';
-import { getRandomInt } from '../utils.ts';
 export interface IPower {
   startPoint: Point; //it represents the top-left point of the rectangular container of the car
   h: number;

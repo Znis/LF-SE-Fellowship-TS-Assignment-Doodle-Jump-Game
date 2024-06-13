@@ -23,6 +23,10 @@ export enum Direction {
   left = "left",
 }
 
+export enum PlatformType {
+  flexible = "flexible",
+  broken = "broken",
+}
 type stateVariables = {
   doodler: Doodler,
   gameState: GameState;

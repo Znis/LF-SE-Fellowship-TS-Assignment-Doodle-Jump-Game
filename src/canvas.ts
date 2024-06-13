@@ -137,32 +137,32 @@ export function drawGameOver(i: number): void {
   ctx.font = "18px Outfit";
   ctx.fillText(
     "Click to Restart",
-    canvas.width / 2 - 10,
+    canvas.width / 2 - 5,
     canvas.height +(i-10)
   );
 }
 export function drawGamePause(): void {
   ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.font = "48px Outfit";
-  ctx.fillStyle = "orange";
-  ctx.fillText("Game Paused", canvas.width / 2 - 130, canvas.height / 2 - 50);
   ctx.font = "32px Outfit";
-  ctx.fillText(
-    `Score: ${stateVariables.score}`,
-    canvas.width / 2 - 100,
-    canvas.height / 2 + 10
-  );
-  ctx.font = "26px Outfit";
-  ctx.fillText(
-    `High Score: ${stateVariables.highScore}`,
-    canvas.width / 2 - 100,
-    canvas.height / 2 + 70
-  );
+  ctx.fillStyle = "orange";
+  ctx.fillText("Game Paused", canvas.width / 2 - 10, canvas.height / 2 - 50);
   ctx.font = "24px Outfit";
   ctx.fillText(
+    `Score: ${stateVariables.score}`,
+    canvas.width / 2 - 5,
+    canvas.height / 2 + 10
+  );
+  ctx.font = "20px Outfit";
+  ctx.fillText(
+    `High Score: ${stateVariables.highScore}`,
+    canvas.width / 2 - 5,
+    canvas.height / 2 + 70
+  );
+  ctx.font = "18px Outfit";
+  ctx.fillText(
     "Click to Resume",
-    canvas.width / 2 - 100,
+    canvas.width / 2 - 5,
     canvas.height / 2 + 140
   );
 }
@@ -170,5 +170,5 @@ export function showStartMessage(): void{
   ctx.font = '20px Arial';
   ctx.fillStyle = 'black';
   ctx.textAlign = 'center';
-  ctx.fillText('Press Space to Start', canvas.width / 2, canvas.height - 60);
+  ctx.fillText('Press R to Start', canvas.width / 2, canvas.height - 60);
 }

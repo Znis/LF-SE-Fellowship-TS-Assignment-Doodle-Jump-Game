@@ -5,6 +5,7 @@ import { handleJump,
   startGame,
   pauseGame,
   resumeGame,
+  restartGame
  } from "./functions";
 
 export default window.addEventListener("keydown", (event) => {
@@ -23,8 +24,13 @@ export default window.addEventListener("keydown", (event) => {
       goLeft();
       break;
     }
-    case "e": {
-
+    case "r": {
+      if (stateVariables.gameState == GameState.gameOver) {
+        restartGame();
+      }
+      if (stateVariables.gameState == GameState.paused) {
+        resumeGame();
+      }
       if (stateVariables.gameState == GameState.initialisation){
         startGame();
       }
