@@ -55,7 +55,6 @@ export const doodlerState = {
   onPlatform: false,
   distanceFromGround: 0,
   gravity: 0.4,
-  currentPlatform: new Platform(new Point(0,DIMENSIONS.CANVAS_HEIGHT),10,DIMENSIONS.CANVAS_WIDTH,''),
   dy: 0,
   dx: 0,
   fallDistance: 500,

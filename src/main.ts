@@ -35,9 +35,9 @@ export function draw() {
     showStartMessage();
 
   } else if (stateVariables.gameState == GameState.running) {
+    updateCameraPosition();
     handleJump();
     moveDoodler();
-    updateCameraPosition();
     moveRandomPlatforms();
     checkAndHandleCollision();
     checkForPowerCollision();

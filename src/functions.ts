@@ -58,7 +58,7 @@ export function generateRandomPlatform() {
   let randomX = Math.floor(
     (Math.random() * (DIMENSIONS.CANVAS_WIDTH - PLATFORM_WIDTH) * 4) / 5
   );
-  if (Math.random() < 0.1) {
+  if (Math.random() < 0.04) {
     const power: Power = new Power(
       new Point(randomX, -40),
       POWER_WIDTH,
@@ -98,7 +98,7 @@ export function updateCameraPosition(): void {
     stateVariables.powerArray.forEach((power) => {
       power.startPoint.y -= dy;
     });
-    doodlerState.currentPlatform.startPoint.y -= dy;
+
     if (stateVariables.platformArray[0].startPoint.y > 40) {
       generateRandomPlatform();
       stateVariables.score++;
@@ -138,7 +138,7 @@ export function checkAndHandleCollision() {
     ) {
       stateVariables.doodler.startPoint.y =
         platform.startPoint.y - stateVariables.doodler.h;
-      doodlerState.currentPlatform = platform;
+
       doodlerState.onPlatform = true;
       doodlerState.onGround = false;
       doodlerState.dy = -SPEED_Y;
@@ -161,13 +161,7 @@ export function handleJump(): void {
     doodlerState.dy = -SPEED_Y;
   }
 
-  doodlerState.onPlatform =
-    stateVariables.doodler.startPoint.x <
-      doodlerState.currentPlatform.startPoint.x +
-        doodlerState.currentPlatform.w &&
-    stateVariables.doodler.startPoint.x + stateVariables.doodler.w >
-      doodlerState.currentPlatform.startPoint.x &&
-    doodlerState.currentPlatform.startPoint.y <= DIMENSIONS.CANVAS_HEIGHT;
+
 
   if (
     stateVariables.doodler.startPoint.y +
@@ -245,7 +239,6 @@ export function gameOverAnimation() {
     stateVariables.powerArray.forEach((power) => {
       power.startPoint.y -= dy;
     });
-    doodlerState.currentPlatform.startPoint.y -= dy;
     stateVariables.doodler.startPoint.y -= dy;
     stateVariables.doodler.startPoint.y += 5;
     doodlerState.fallDistance -= 5;
@@ -274,12 +267,7 @@ export function resumeGame() {
 }
 export function restartGame() {
   stateVariables.score = 0;
-  doodlerState.currentPlatform = new Platform(
-    new Point(0, DIMENSIONS.CANVAS_HEIGHT),
-    10,
-    DIMENSIONS.CANVAS_WIDTH,
-    ""
-  );
+
   doodlerState.distanceFromGround = 0;
   doodlerState.onPlatform = false;
   doodlerState.onGround = true;
