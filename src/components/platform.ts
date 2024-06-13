@@ -1,4 +1,3 @@
-import { ImagePath } from './../state-variables';
 import Point from "../shapes/point.ts";
 import { DIMENSIONS } from '../constants.ts';
 import { getRandomInt } from '../utils.ts';

@@ -1,7 +1,8 @@
 import { DIMENSIONS } from "./constants.ts";
 import { GameState,stateVariables } from "./state-variables.ts";
 const canvas = document.querySelector("#gameCanvas") as HTMLCanvasElement;
-import { resumeGame, initialiseGame, restartGame } from "./functions.ts";
+import { resumeGame, restartGame } from "./functions.ts";
+
 const ctx = canvas.getContext("2d")!;
 
 canvas.width = DIMENSIONS.CANVAS_WIDTH;
@@ -57,6 +58,9 @@ export default function drawCanvas(): void {
     stateVariables.doodler.w,
     stateVariables.doodler.h
   );
+  // const random = new Image();
+  // random.src='./assets/images/jetSheet.png';
+  // ctx.drawImage(random,jetSprite.position[1].x,jetSprite.position[1].y,jetSprite.width,jetSprite.height);
   drawScore();
 }
 
@@ -76,29 +80,29 @@ function drawScore(): void {
   ctx.fillText("Score: " + stateVariables.score, 50, 30);
 }
 
-export function drawGameOver(): void {
-  ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.font = "48px Outfit";
+export function drawGameOver(i: number): void {
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+  ctx.fillRect(0, canvas.height+i, canvas.width, canvas.height);
+  ctx.font = "32px Outfit";
   ctx.fillStyle = "#ff0000";
-  ctx.fillText("Game Over", canvas.width / 2 - 30, canvas.height / 2 - 50);
+  ctx.fillText("Game Over", canvas.width / 2 - 10, canvas.height + (i-150));
   ctx.font = "32px Outfit";
   ctx.fillText(
     `Score: ${stateVariables.score}`,
-    canvas.width / 2 - 100,
-    canvas.height / 2 + 10
+    canvas.width / 2 - 5,
+    canvas.height +(i-100)
   );
-  ctx.font = "26px Outfit";
+  ctx.font = "20px Outfit";
   ctx.fillText(
     `High Score: ${stateVariables.highScore}`,
-    canvas.width / 2 - 100,
-    canvas.height / 2 + 70
+    canvas.width / 2 - 5,
+    canvas.height + (i-50)
   );
-  ctx.font = "24px Outfit";
+  ctx.font = "18px Outfit";
   ctx.fillText(
     "Click to Restart",
-    canvas.width / 2 - 100,
-    canvas.height / 2 + 140
+    canvas.width / 2 - 10,
+    canvas.height +(i-10)
   );
 }
 export function drawGamePause(): void {

@@ -5,10 +5,9 @@ import { handleJump,
   startGame,
   pauseGame,
   resumeGame,
-  restartGame
  } from "./functions";
 
-export default window.addEventListener("keypress", (event) => {
+export default window.addEventListener("keydown", (event) => {
   switch (event.key) {
     //jump
     case "w": {

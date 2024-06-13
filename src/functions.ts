@@ -7,8 +7,6 @@ import {
   DOODLER_WIDTH,
   PLATFORM_HEIGHT,
   PLATFORM_WIDTH,
-  MAX_PLATFORM_SPACING,
-  MIN_PLATFORM_SPACING,
   SPEED_Y,
   SPEED_X,
 } from "./constants";
@@ -20,7 +18,7 @@ import {
 } from "./state-variables";
 import Platform from "./components/platform";
 import { getRandomInt } from "./utils";
-import { drawGamePause } from "./canvas";
+import { drawGameOver, drawGamePause } from "./canvas";
 
 export function initialiseDoodler(): void {
   stateVariables.doodler = new Doodler(
@@ -36,20 +34,11 @@ export function initialiseDoodler(): void {
 
 export function generateInitialPlatforms(): void {
   let ymax = DIMENSIONS.CANVAS_HEIGHT - 50;
-  const minPlatformGap = 50;
-  const maxPlatformGap = 150;
-  const minClusterHeight = 100;
-  const maxClusterHeight = 200;
-  const minGapBetweenClusters = 50;
-  const maxGapBetweenClusters = 100;
-  while (ymax > 0) {
-    let clusterHeight =
-      minClusterHeight + getRandomInt(minClusterHeight, maxClusterHeight);
-    let clusterEnd = ymax - clusterHeight;
-    while (ymax > clusterEnd && ymax > 0) {
+    while (ymax > 0) {
+    let randomX = Math.floor((DIMENSIONS.CANVAS_WIDTH - PLATFORM_WIDTH)*3/4);
       const platform: Platform = new Platform(
         new Point(
-          getRandomInt(0, DIMENSIONS.CANVAS_WIDTH - PLATFORM_WIDTH),
+          getRandomInt(0, randomX),
           ymax
         ),
         PLATFORM_HEIGHT,
@@ -58,28 +47,27 @@ export function generateInitialPlatforms(): void {
       );
       stateVariables.platformArray.push(platform);
 
-      ymax -=
-        minPlatformGap + Math.random() * (maxPlatformGap - minPlatformGap);
+      ymax -= 50;
     }
-    ymax -=
-      minGapBetweenClusters +
-      Math.random() * (maxGapBetweenClusters - minGapBetweenClusters);
-  }
+
 }
 
 export function generateRandomPlatform() {
+    let randomX = Math.floor((DIMENSIONS.CANVAS_WIDTH - PLATFORM_WIDTH)*4/5);
   const platform: Platform = new Platform(
-    new Point(getRandomInt(0, DIMENSIONS.CANVAS_WIDTH - PLATFORM_WIDTH), 0),
+    new Point(getRandomInt(0, randomX), 0),
     PLATFORM_HEIGHT,
     PLATFORM_WIDTH,
     "./assets/images/platform.png"
   );
+
   stateVariables.platformArray.unshift(platform);
 
 }
 
 export function moveRandomPlatforms() {
-  if(doodlerState.distanceFromGround > 2 * DIMENSIONS.CANVAS_HEIGHT){
+    console.log(doodlerState.distanceFromGround)
+  if(doodlerState.distanceFromGround > DIMENSIONS.CANVAS_HEIGHT){
     stateVariables.platformArray.forEach((platform) => {
       platform.movePlatform();
     });
@@ -89,19 +77,26 @@ export function moveRandomPlatforms() {
 
 export function updateCameraPosition(): void {
   const dy = stateVariables.doodler.startPoint.y - DIMENSIONS.CANVAS_HEIGHT / 2;
+ 
+  if(dy < 0){
   stateVariables.doodler.startPoint.y -= dy;
-  doodlerState.distanceFromGround += Math.abs(dy);
-  if (
-    stateVariables.platformArray[0].startPoint.y >
-    getRandomInt(MIN_PLATFORM_SPACING, MAX_PLATFORM_SPACING)
-  ) {
-    generateRandomPlatform();
-  }
-
   stateVariables.platformArray.forEach((element) => {
     element.startPoint.y -= dy;
   });
   doodlerState.currentPlatform.startPoint.y -= dy;
+  if (
+    stateVariables.platformArray[0].startPoint.y >
+    50
+  ) {
+    
+    generateRandomPlatform();
+    stateVariables.score++;
+    stateVariables.highScore = Math.max(stateVariables.highScore, stateVariables.score);
+    doodlerState.distanceFromGround += 50;
+  }
+
+
+}
 }
 
 export function collisionDetection(doodler: Doodler, platform: Platform) {
@@ -111,6 +106,13 @@ export function collisionDetection(doodler: Doodler, platform: Platform) {
     doodler.startPoint.y < platform.startPoint.y + platform.h &&
     doodler.startPoint.y + doodler.h > platform.startPoint.y
   );
+}
+
+
+export function moveDoodler(): void{
+stateVariables.doodler.startPoint.x += doodlerState.dx;
+if(doodlerState.dx > 0) doodlerState.dx -= 0.4; 
+if(doodlerState.dx < 0) doodlerState.dx += 0.4; 
 }
 
 export function checkAndHandleCollision() {
@@ -125,8 +127,7 @@ export function checkAndHandleCollision() {
       doodlerState.onPlatform = true;
       doodlerState.onGround = false;
       doodlerState.dy = -SPEED_Y;
-      stateVariables.score++;
-      stateVariables.highScore = Math.max(stateVariables.highScore, stateVariables.score);
+
     }
   });
 }
@@ -157,9 +158,8 @@ export function handleJump(): void {
     stateVariables.doodler.startPoint.y < DIMENSIONS.CANVAS_HEIGHT / 2 &&
     doodlerState.onPlatform
   ) {
-    doodlerState.distanceFromGround += DIMENSIONS.CANVAS_WIDTH / 2;
+    
 
-    updateCameraPosition();
   }
 }
 export function goRight(): void {
@@ -167,7 +167,7 @@ export function goRight(): void {
   if (doodlerTopLeftX > DIMENSIONS.CANVAS_WIDTH) {
     stateVariables.doodler.startPoint.x = 0;
   } else {
-    stateVariables.doodler.startPoint.x += SPEED_X;
+    doodlerState.dx = SPEED_X;
   }
   doodlerState.doodlerDir = Direction.right;
   stateVariables.doodler.updateDoodler();
@@ -179,7 +179,8 @@ export function goLeft(): void {
     stateVariables.doodler.startPoint.x =
       DIMENSIONS.CANVAS_WIDTH - stateVariables.doodler.w;
   } else {
-    stateVariables.doodler.startPoint.x -= SPEED_X;
+    doodlerState.dx = -SPEED_X;
+    
   }
   doodlerState.doodlerDir = Direction.left;
   stateVariables.doodler.updateDoodler();
@@ -197,7 +198,32 @@ export function startGame() {
 
 export function gameOver() {
   stateVariables.gameState = GameState.gameOver;
+
 }
+export function gameOverAnimation(){
+
+
+    if (doodlerState.fallDistance > 0) {
+        const dy = stateVariables.doodler.startPoint.y - DIMENSIONS.CANVAS_HEIGHT / 2;
+        stateVariables.platformArray.forEach((element) => {
+            element.startPoint.y -= dy;
+          });
+          doodlerState.currentPlatform.startPoint.y -= dy;
+        stateVariables.doodler.startPoint.y -= dy;
+        stateVariables.doodler.startPoint.y +=5;
+        doodlerState.fallDistance -= 5;
+      }else{
+
+        stateVariables.gameOverTransition > 0 ? drawGameOver(stateVariables.gameOverTransition -= 4): drawGameOver(0);
+        if(stateVariables.doodler.startPoint.y < DIMENSIONS.CANVAS_HEIGHT){
+            stateVariables.doodler.startPoint.y += 4;
+            
+        }
+      
+      }
+
+}
+
 export function pauseGame() {
   if (stateVariables.gameState == GameState.running) {
     stateVariables.gameState = GameState.paused;
@@ -217,6 +243,10 @@ export function restartGame() {
   doodlerState.distanceFromGround = 0;
   doodlerState.onPlatform = false;
   doodlerState.onGround = true;
+  doodlerState.dx = 0;
+  doodlerState.dy = 0;
+  doodlerState.fallDistance = 400;
+  stateVariables.gameOverTransition = 150;
   stateVariables.platformArray = [];
   stateVariables.gameState = GameState.initialisation;
   initialiseGame();

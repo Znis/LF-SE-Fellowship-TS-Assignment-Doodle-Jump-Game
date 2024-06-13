@@ -27,6 +27,7 @@ type stateVariables = {
   score: number;
   highScore: number;
   platformArray: Platform[],
+  gameOverTransition: number,
 };
 export const stateVariables = {
   doodler: {} as Doodler,
@@ -35,6 +36,8 @@ export const stateVariables = {
   highScore: 0,
   platformArray: [] as Platform[],
   reqAnimFrame: 0,
+  gameOverTransition: 150,
+
 };
 
 export const doodlerState = {
@@ -45,5 +48,8 @@ export const doodlerState = {
   gravity: 0.4,
   currentPlatform: new Platform(new Point(0,DIMENSIONS.CANVAS_HEIGHT),10,DIMENSIONS.CANVAS_WIDTH,''),
   dy: 0,
+  dx: 0,
+  fallDistance: 500,
+
 
 };

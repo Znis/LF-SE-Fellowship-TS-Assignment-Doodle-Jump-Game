@@ -1,5 +1,5 @@
 import Point from "../shapes/point.ts";
-import { Direction, ImagePath, stateVariables, doodlerState } from "../state-variables.ts";
+import { Direction, ImagePath, doodlerState } from "../state-variables.ts";
 export interface IDoodler {
   startPoint: Point; //it represents the top-left point of the rectangular container of the car
   h: number;
