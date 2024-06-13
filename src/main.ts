@@ -1,4 +1,4 @@
-import drawCanvas, {showStartMessage } from "./canvas";
+import drawCanvas, { showStartMessage } from "./canvas";
 import "./controls.ts";
 import {
   checkAndHandleCollision,
@@ -21,11 +21,9 @@ const enterBtn = document.querySelector<HTMLButtonElement>("#enter-btn")!;
 enterBtn.addEventListener("click", () => {
   startScreen.style.display = "none";
   // username = username_input.value || "";
- 
 
   stateVariables.gameState = GameState.initialisation;
   initialiseGame();
-
 });
 
 export function draw() {
@@ -33,7 +31,6 @@ export function draw() {
   drawCanvas();
   if (stateVariables.gameState == GameState.initialisation) {
     showStartMessage();
-
   } else if (stateVariables.gameState == GameState.running) {
     updateCameraPosition();
     handleJump();
@@ -44,11 +41,10 @@ export function draw() {
   } else if (stateVariables.gameState == GameState.gameOver) {
     gameOverAnimation();
     stateVariables.highScore =
-    stateVariables.score > stateVariables.highScore
-      ? stateVariables.score
-      : stateVariables.highScore;
-  } 
-
+      stateVariables.score > stateVariables.highScore
+        ? stateVariables.score
+        : stateVariables.highScore;
+  }
 }
 //run the gameloop only if the gamestate is not in welcomeScreen
 if (stateVariables.gameState != GameState.welcomeScreen) {

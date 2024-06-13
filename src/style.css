@@ -1,26 +1,24 @@
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-body{
-display: flex;
-justify-content: space-around;
-align-items: center;
-margin: 0;
-padding: 1rem;
-background-color: #E9DCC9;
-font-family: Outfit, sans-serif;
+body {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 0;
+  padding: 1rem;
+  background-color: #e9dcc9;
+  font-family: Outfit, sans-serif;
 }
-canvas{
+canvas {
   display: none;
   border-radius: 20px;
   min-width: 400px;
   min-height: 400px;
-
-  
 }
-.info-screen{
+.info-screen {
   height: 600px;
   width: 400px;
   border-radius: 20px;
@@ -32,25 +30,23 @@ canvas{
   justify-content: center;
   overflow: hidden;
 }
-.info-screen__bg-image-wrapper{
+.info-screen__bg-image-wrapper {
   position: absolute;
   top: 0;
   left: 0;
   z-index: -1;
-
 }
-.info-screen__bg-image{
+.info-screen__bg-image {
   max-width: 100%;
   max-height: 100%;
   object-fit: cover;
 }
-.intro__name-input{
+.intro__name-input {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   gap: 1rem;
-
 }
 .name {
   border-radius: 10px;
@@ -70,13 +66,13 @@ canvas{
   gap: 0.8rem;
   cursor: pointer;
 }
-.button:hover{
+.button:hover {
   box-shadow: 0px 0px 18px 0px #ffa500;
 }
-.icon-div{
-display: flex;
-flex-wrap: wrap;
-gap: 4rem;
+.icon-div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4rem;
 }
 @keyframes rotate {
   from {
@@ -94,20 +90,20 @@ gap: 4rem;
     transform: rotate(-360deg);
   }
 }
-.icon-image-wrapper1{
+.icon-image-wrapper1 {
   display: flex;
   justify-content: center;
   align-items: center;
   animation: rotate 3s linear infinite;
 }
-.icon-image-wrapper2{
+.icon-image-wrapper2 {
   display: flex;
   justify-content: center;
   align-items: center;
   animation: rotate-reverse 3s linear infinite;
 }
 
-.icon-image{
+.icon-image {
   max-width: 100%;
   max-height: 100%;
   object-fit: cover;

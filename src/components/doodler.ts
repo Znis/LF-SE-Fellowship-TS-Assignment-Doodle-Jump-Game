@@ -20,14 +20,16 @@ export default class Doodler implements IDoodler {
     this.h = h;
     this.w = w;
     this.image = new Image();
-    this.direction = direction
-    this.imagePath = this.direction == Direction.right ? ImagePath.right : ImagePath.left;
+    this.direction = direction;
+    this.imagePath =
+      this.direction == Direction.right ? ImagePath.right : ImagePath.left;
     this.image.src = this.imagePath;
     console.log(this.imagePath);
   }
-  updateDoodler(){
+  updateDoodler() {
     this.direction = doodlerState.doodlerDir;
-    this.imagePath = this.direction == Direction.right ? ImagePath.right : ImagePath.left;
+    this.imagePath =
+      this.direction == Direction.right ? ImagePath.right : ImagePath.left;
     this.image.src = this.imagePath;
   }
 }

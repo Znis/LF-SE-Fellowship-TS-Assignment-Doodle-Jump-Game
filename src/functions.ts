@@ -11,6 +11,10 @@ import {
   SPEED_X,
   POWER_WIDTH,
   POWER_HEIGHT,
+  MIN_PLATFORM_SPACING,
+  MAX_PLATFORM_SPACING,
+  X_DIR_VELOCITY_DAMPENING,
+  JETPACK_DURATION,
 } from "./constants";
 import {
   Direction,
@@ -37,10 +41,10 @@ export function initialiseDoodler(): void {
 }
 
 export function generateInitialPlatforms(): void {
-  let ymax = DIMENSIONS.CANVAS_HEIGHT - 50;
+  let ymax = DIMENSIONS.CANVAS_HEIGHT - MIN_PLATFORM_SPACING;
   while (ymax > 0) {
     let randomX = Math.floor(
-      (Math.random() * (DIMENSIONS.CANVAS_WIDTH - PLATFORM_WIDTH) * 4) / 5
+      Math.random() * (DIMENSIONS.CANVAS_WIDTH - PLATFORM_WIDTH)
     );
     const platform: Platform = new Platform(
       new Point(getRandomInt(0, randomX), ymax),
@@ -50,17 +54,17 @@ export function generateInitialPlatforms(): void {
     );
     stateVariables.platformArray.push(platform);
 
-    ymax -= 40;
+    ymax -= getRandomInt(MIN_PLATFORM_SPACING, MAX_PLATFORM_SPACING);
   }
 }
 
 export function generateRandomPlatform() {
   let randomX = Math.floor(
-    (Math.random() * (DIMENSIONS.CANVAS_WIDTH - PLATFORM_WIDTH) * 4) / 5
+    Math.random() * (DIMENSIONS.CANVAS_WIDTH - PLATFORM_WIDTH)
   );
   if (Math.random() < 0.04) {
     const power: Power = new Power(
-      new Point(randomX, -40),
+      new Point(randomX, -POWER_HEIGHT),
       POWER_WIDTH,
       POWER_HEIGHT,
       "./assets/images/jetpack.png"
@@ -99,14 +103,20 @@ export function updateCameraPosition(): void {
       power.startPoint.y -= dy;
     });
 
-    if (stateVariables.platformArray[0].startPoint.y > 40) {
+    if (
+      stateVariables.platformArray[0].startPoint.y >
+      getRandomInt(MIN_PLATFORM_SPACING, MAX_PLATFORM_SPACING)
+    ) {
       generateRandomPlatform();
       stateVariables.score++;
       stateVariables.highScore = Math.max(
         stateVariables.highScore,
         stateVariables.score
       );
-      doodlerState.distanceFromGround += 40;
+      doodlerState.distanceFromGround += getRandomInt(
+        MIN_PLATFORM_SPACING,
+        MAX_PLATFORM_SPACING
+      );
     }
   }
 }
@@ -125,8 +135,8 @@ export function collisionDetection(
 
 export function moveDoodler(): void {
   stateVariables.doodler.startPoint.x += doodlerState.dx;
-  if (doodlerState.dx > 0) doodlerState.dx -= 0.4;
-  if (doodlerState.dx < 0) doodlerState.dx += 0.4;
+  if (doodlerState.dx > 0) doodlerState.dx -= X_DIR_VELOCITY_DAMPENING;
+  if (doodlerState.dx < 0) doodlerState.dx += X_DIR_VELOCITY_DAMPENING;
 }
 
 export function checkAndHandleCollision() {
@@ -160,8 +170,6 @@ export function handleJump(): void {
   ) {
     doodlerState.dy = -SPEED_Y;
   }
-
-
 
   if (
     stateVariables.doodler.startPoint.y +
@@ -226,7 +234,7 @@ export function initiateJetpackPower() {
   const jetpack = setTimeout(() => {
     clearTimeout(jetpack);
     doodlerState.hasPower = false;
-  }, 4000);
+  }, JETPACK_DURATION);
 }
 
 export function gameOverAnimation() {
@@ -267,13 +275,11 @@ export function resumeGame() {
 }
 export function restartGame() {
   stateVariables.score = 0;
-
   doodlerState.distanceFromGround = 0;
   doodlerState.onPlatform = false;
   doodlerState.onGround = true;
   doodlerState.dx = 0;
   doodlerState.dy = 0;
-  doodlerState.fallDistance = 400;
   stateVariables.gameOverTransition = 150;
   stateVariables.platformArray = [];
   stateVariables.gameState = GameState.initialisation;

@@ -1,7 +1,5 @@
 import Doodler from "./components/doodler";
-import Point from "./shapes/point";
 import Platform from "./components/platform";
-import { DIMENSIONS } from "./constants";
 import Power from "./components/power";
 
 //game state variables that is accessed globally
@@ -28,14 +26,14 @@ export enum PlatformType {
   broken = "broken",
 }
 type stateVariables = {
-  doodler: Doodler,
+  doodler: Doodler;
   gameState: GameState;
   score: number;
   highScore: number;
-  platformArray: Platform[],
-  gameOverTransition: number,
-  jetAnimIdx: number,
-  powerArray: Power[]
+  platformArray: Platform[];
+  gameOverTransition: number;
+  jetAnimIdx: number;
+  powerArray: Power[];
 };
 export const stateVariables = {
   doodler: {} as Doodler,
@@ -58,6 +56,5 @@ export const doodlerState = {
   dy: 0,
   dx: 0,
   fallDistance: 500,
-hasPower: false,
-
+  hasPower: false,
 };
