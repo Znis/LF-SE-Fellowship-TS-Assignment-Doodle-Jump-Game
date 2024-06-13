@@ -140,7 +140,7 @@ export function handleJump(): void {
   ) {
     doodlerState.dy = -SPEED_Y;
   }
-
+console.log(stateVariables.doodler.startPoint.y)
   doodlerState.onPlatform =
     stateVariables.doodler.startPoint.x <
       doodlerState.currentPlatform.startPoint.x +
@@ -150,7 +150,7 @@ export function handleJump(): void {
 
 
 
-  if(stateVariables.doodler.startPoint.y+stateVariables.doodler.h-doodlerState.gravity*2 >= DIMENSIONS.CANVAS_HEIGHT){
+  if(stateVariables.doodler.startPoint.y  >= DIMENSIONS.CANVAS_HEIGHT){
    gameOver();
   }
   if (
