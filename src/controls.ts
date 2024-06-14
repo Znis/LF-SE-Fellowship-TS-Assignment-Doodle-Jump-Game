@@ -1,6 +1,5 @@
 import { GameState, stateVariables } from "./state-variables";
 import {
-  handleJump,
   goRight,
   goLeft,
   startGame,
