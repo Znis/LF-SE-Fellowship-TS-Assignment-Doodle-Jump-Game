@@ -32,7 +32,7 @@ export default class Platform implements IPlatform {
   }
   assignType() {
     const randNum = Math.random();
-    if (randNum < 0.1) {
+    if (randNum < 0.05) {
       return PlatformType.broken;
     } else {
       return PlatformType.flexible;
