@@ -1,12 +1,5 @@
 import Point from "../shapes/point.ts";
-export interface IPower {
-  startPoint: Point; //it represents the top-left point of the rectangular container of the power
-  h: number;
-  w: number;
-  imagePath: string;
-  image: HTMLImageElement;
-}
-export default class Power implements IPower {
+export default class Power {
   startPoint: Point;
   h: number;
   w: number;

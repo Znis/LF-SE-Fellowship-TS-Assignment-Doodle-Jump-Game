@@ -1,14 +1,7 @@
 import Point from "../shapes/point.ts";
 import { Direction, ImagePath, doodlerState } from "../state-variables.ts";
-export interface IDoodler {
-  startPoint: Point; //it represents the top-left point of the rectangular container of the doodler
-  h: number;
-  w: number;
-  imagePath: string;
-  direction: Direction;
-  image: HTMLImageElement;
-}
-export default class Doodler implements IDoodler {
+
+export default class Doodler {
   startPoint: Point;
   h: number;
   w: number;

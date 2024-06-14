@@ -1,11 +1,4 @@
-export interface IPoint {
-  x: number;
-  y: number;
-
-  distance: (point: IPoint) => number;
-}
-
-export default class Point implements IPoint {
+export default class Point {
   x: number;
   y: number;
   constructor(x: number, y: number) {

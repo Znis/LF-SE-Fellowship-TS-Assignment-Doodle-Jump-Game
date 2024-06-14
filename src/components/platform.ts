@@ -2,15 +2,7 @@ import Point from "../shapes/point.ts";
 import { DIMENSIONS } from "../constants.ts";
 import { getRandomInt } from "../utils.ts";
 import { PlatformType } from "../state-variables.ts";
-export interface IPlatform {
-  startPoint: Point; //it represents the top-left point of the rectangular container of the doodler
-  h: number;
-  w: number;
-  type: PlatformType;
-  imagePath: string;
-  image: HTMLImageElement;
-}
-export default class Platform implements IPlatform {
+export default class Platform {
   startPoint: Point;
   h: number;
   w: number;
