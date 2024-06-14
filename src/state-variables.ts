@@ -32,7 +32,7 @@ type stateVariables = {
   highScore: number;
   platformArray: Platform[];
   gameOverTransition: number;
-  jetAnimIdx: number;
+  jetAnimIdx: number; //index for changing frame in Jetpack animation
   powerArray: Power[];
 };
 export const stateVariables = {
@@ -55,6 +55,6 @@ export const doodlerState = {
   gravity: 0.4,
   dy: 0,
   dx: 0,
-  fallDistance: 500,
+  fallDistance: 500, //distance to show the gameover when falling
   hasPower: false,
 };

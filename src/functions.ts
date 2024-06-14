@@ -58,20 +58,13 @@ export function generateInitialPlatforms(): void {
   }
 }
 
+//function that generates new platform when Doodler moves up
 export function generateRandomPlatform() {
   let randomX = Math.floor(
     Math.random() * (DIMENSIONS.CANVAS_WIDTH - PLATFORM_WIDTH)
   );
-  if (Math.random() < 0.04) {
-    const power: Power = new Power(
-      new Point(randomX, -POWER_HEIGHT),
-      POWER_WIDTH,
-      POWER_HEIGHT,
-      "./assets/images/jetpack.png"
-    );
-    stateVariables.powerArray.push(power);
-  }
-
+  //function that generates the power (Jetpack)
+  generateRandomPower(randomX);
   const platform: Platform = new Platform(
     new Point(randomX, 0),
     PLATFORM_HEIGHT,
@@ -82,8 +75,21 @@ export function generateRandomPlatform() {
   stateVariables.platformArray.unshift(platform);
 }
 
+
+export function generateRandomPower(randomX: number){
+  if (Math.random() < 0.04) { //4% chance that the the Jetpack spawns
+    const power: Power = new Power(
+      new Point(randomX, -POWER_HEIGHT),
+      POWER_WIDTH,
+      POWER_HEIGHT,
+      "./assets/images/jetpack.png"
+    );
+    stateVariables.powerArray.push(power);
+  }
+}
+
+//move the platform if it is movable
 export function moveRandomPlatforms() {
-  console.log(doodlerState.distanceFromGround);
   if (doodlerState.distanceFromGround > DIMENSIONS.CANVAS_HEIGHT) {
     stateVariables.platformArray.forEach((platform) => {
       platform.movePlatform();
@@ -91,6 +97,8 @@ export function moveRandomPlatforms() {
   }
 }
 
+//function that updates the canvas elements position as Doodler moves upward (like a camera movement effect following Doodler)
+//it also spawn the new tiles as Doodler moves up
 export function updateCameraPosition(): void {
   const dy = stateVariables.doodler.startPoint.y - DIMENSIONS.CANVAS_HEIGHT / 2;
 
@@ -102,24 +110,29 @@ export function updateCameraPosition(): void {
     stateVariables.powerArray.forEach((power) => {
       power.startPoint.y -= dy;
     });
-
-    if (
-      stateVariables.platformArray[0].startPoint.y >
-      getRandomInt(MIN_PLATFORM_SPACING, MAX_PLATFORM_SPACING)
-    ) {
-      generateRandomPlatform();
-      stateVariables.score++;
-      stateVariables.highScore = Math.max(
-        stateVariables.highScore,
-        stateVariables.score
-      );
-      doodlerState.distanceFromGround += getRandomInt(
-        MIN_PLATFORM_SPACING,
-        MAX_PLATFORM_SPACING
-      );
-    }
+  spawnTheNewPlatform();
   }
 }
+
+//spawn the random platform generated
+export function spawnTheNewPlatform(){
+  if (
+    stateVariables.platformArray[0].startPoint.y >
+    getRandomInt(MIN_PLATFORM_SPACING, MAX_PLATFORM_SPACING)
+  ) {
+    generateRandomPlatform();
+    stateVariables.score++;
+    stateVariables.highScore = Math.max(
+      stateVariables.highScore,
+      stateVariables.score
+    );
+    doodlerState.distanceFromGround += getRandomInt(
+      MIN_PLATFORM_SPACING,
+      MAX_PLATFORM_SPACING
+    );
+  }
+}
+
 
 export function collisionDetection(
   doodler: Doodler,
@@ -133,11 +146,13 @@ export function collisionDetection(
   );
 }
 
+//function that handles the movement of Doodler in the right or left direction
 export function moveDoodler(): void {
   stateVariables.doodler.startPoint.x += doodlerState.dx;
   if (doodlerState.dx > 0) doodlerState.dx -= X_DIR_VELOCITY_DAMPENING;
   if (doodlerState.dx < 0) doodlerState.dx += X_DIR_VELOCITY_DAMPENING;
 }
+
 
 export function checkAndHandleCollision() {
   stateVariables.platformArray.forEach((platform) => {
@@ -156,6 +171,8 @@ export function checkAndHandleCollision() {
   });
 }
 
+//function that makes the Doodler jump continuously on ground or tiles
+//if Doodler falls then, calls the gameover function too
 export function handleJump(): void {
   if (doodlerState.hasPower) {
     doodlerState.dy = -SPEED_Y;
@@ -178,11 +195,6 @@ export function handleJump(): void {
     DIMENSIONS.CANVAS_HEIGHT
   ) {
     gameOver();
-  }
-  if (
-    stateVariables.doodler.startPoint.y < DIMENSIONS.CANVAS_HEIGHT / 2 &&
-    doodlerState.onPlatform
-  ) {
   }
 }
 export function goRight(): void {
@@ -214,6 +226,7 @@ export function initialiseGame() {
   generateInitialPlatforms();
   requestAnimationFrame(draw);
 }
+
 export function startGame() {
   stateVariables.gameState = GameState.running;
 }
@@ -221,6 +234,7 @@ export function startGame() {
 export function gameOver() {
   stateVariables.gameState = GameState.gameOver;
 }
+
 export function checkForPowerCollision() {
   stateVariables.powerArray.forEach((power) => {
     if (collisionDetection(stateVariables.doodler, power)) {
