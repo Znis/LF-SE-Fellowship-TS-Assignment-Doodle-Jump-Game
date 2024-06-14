@@ -1,6 +1,6 @@
 import Point from "../shapes/point.ts";
 export interface IPower {
-  startPoint: Point; //it represents the top-left point of the rectangular container of the car
+  startPoint: Point; //it represents the top-left point of the rectangular container of the power
   h: number;
   w: number;
   imagePath: string;

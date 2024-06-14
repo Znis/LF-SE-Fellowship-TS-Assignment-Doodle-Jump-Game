@@ -11,12 +11,6 @@ import {
 
 export default window.addEventListener("keydown", (event) => {
   switch (event.key) {
-    //jump
-    case "w": {
-      handleJump();
-
-      break;
-    }
     case "d": {
       goRight();
       break;
@@ -25,6 +19,7 @@ export default window.addEventListener("keydown", (event) => {
       goLeft();
       break;
     }
+    //start or restart the game
     case "r": {
       if (stateVariables.gameState == GameState.gameOver) {
         restartGame();

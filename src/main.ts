@@ -18,13 +18,12 @@ const startScreen = document.querySelector<HTMLDivElement>("#info-screen")!;
 const enterBtn = document.querySelector<HTMLButtonElement>("#enter-btn")!;
 const sideTitle = document.querySelector<HTMLHRElement>("#side-title")!;
 const username_input = document.querySelector<HTMLInputElement>("#name")!;
-const rightContainer =
-  document.querySelector<HTMLDivElement>("#right-container")!;
-const leaderboardOl =
-  document.querySelector<HTMLOListElement>("#leaderboard-ol")!;
+const rightContainer = document.querySelector<HTMLDivElement>("#right-container")!;
+const leaderboardOl = document.querySelector<HTMLOListElement>("#leaderboard-ol")!;
 const element: HTMLLIElement = document.createElement("li");
 let username = "";
 
+//event handler to display canvas and hide welcome screen when enter button is pressed
 enterBtn.addEventListener("click", () => {
   startScreen.style.display = "none";
   username = username_input.value || "";
@@ -56,6 +55,7 @@ export function draw() {
         : stateVariables.highScore;
   }
 }
+
 //run the gameloop only if the gamestate is not in welcomeScreen
 if (stateVariables.gameState != GameState.welcomeScreen) {
   requestAnimationFrame(draw);

@@ -23,6 +23,7 @@ export default function drawCanvas(): void {
 
   ctx.fillRect(0, 0, DIMENSIONS.CANVAS_WIDTH, DIMENSIONS.CANVAS_HEIGHT);
 
+  //the following for-loops draw the grid like background of the Doodle Jump game
   for (let i = 0; i < DIMENSIONS.CANVAS_WIDTH; i += 20) {
     ctx.beginPath();
     ctx.moveTo(i, 0);
@@ -38,16 +39,19 @@ export default function drawCanvas(): void {
     ctx.stroke();
   }
 
-  stateVariables.platformArray.forEach((element) => {
+  //draw the platform tiles
+  stateVariables.platformArray.forEach((platform) => {
     ctx.beginPath();
     ctx.drawImage(
-      element.image,
-      element.startPoint.x,
-      element.startPoint.y,
-      element.w,
-      element.h
+      platform.image,
+      platform.startPoint.x,
+      platform.startPoint.y,
+      platform.w,
+      platform.h
     );
   });
+
+  //draw the power like Jetpack if present
   if (!doodlerState.hasPower) {
     stateVariables.powerArray.forEach((power) => {
       ctx.drawImage(
@@ -60,10 +64,13 @@ export default function drawCanvas(): void {
     });
   }
 
+  //loop through the Jet Sprite frames to create the animation
   if (doodlerState.hasPower) {
     stateVariables.jetAnimIdx < 9
       ? stateVariables.jetAnimIdx++
       : (stateVariables.jetAnimIdx = 0);
+
+    //if doodler is facing at the right direction
     if (doodlerState.doodlerDir == Direction.right) {
       ctx.drawImage(
         jetSprite.sprite,
@@ -76,7 +83,10 @@ export default function drawCanvas(): void {
         20,
         50
       );
-    } else {
+    } 
+
+    //if doodler is facing at the left direction
+    else {
       ctx.drawImage(
         jetSprite.sprite,
         jetSprite.position[stateVariables.jetAnimIdx].x,
@@ -90,7 +100,10 @@ export default function drawCanvas(): void {
       );
     }
   }
+
   drawScore();
+
+  //draw the doodler
   ctx.beginPath();
   ctx.drawImage(
     stateVariables.doodler.image,
@@ -101,6 +114,7 @@ export default function drawCanvas(): void {
   );
 }
 
+
 canvas.addEventListener("click", () => {
   if (stateVariables.gameState == GameState.gameOver) {
     restartGame();
@@ -110,13 +124,15 @@ canvas.addEventListener("click", () => {
   }
 });
 
+
 function drawScore(): void {
   ctx.font = "24px Outfit";
   ctx.fillStyle = "#FF5733";
   ctx.fillText("Score: " + stateVariables.score, 55, 30);
 }
 
-export function drawGameOver(i: number): void {
+
+export function drawGameOver(i: number): void { //here the i is the variable to create animation effect for drawing gameover
   ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
   ctx.fillRect(0, canvas.height / 2, canvas.width, canvas.height);
   ctx.font = "32px Outfit";
@@ -141,6 +157,7 @@ export function drawGameOver(i: number): void {
     canvas.height + (i - 10)
   );
 }
+
 export function drawGamePause(): void {
   ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -166,6 +183,7 @@ export function drawGamePause(): void {
     canvas.height / 2 + 140
   );
 }
+
 export function showStartMessage(): void {
   ctx.font = "20px Arial";
   ctx.fillStyle = "black";
